@@ -1,0 +1,27 @@
+SP San Pablo
+NP Neptuno
+PJ Pajaritos
+LR Las Rejas
+EC Ecuador
+AH San Alberto Hurtado
+US Universidad de Santiago
+EL Estación Central
+LA ULA
+RP República
+LH Los Héroes
+LM La Moneda
+CH Universidad de Chile
+SL Santa Lucía
+UC Universidad Católica
+BA Baquedano
+SA Salvador
+MM Manuel Montt
+PV Pedro de Valdivia
+LE Los Leones
+TB Tobalaba
+GO El Golf
+AL Alcántara
+EM Escuela Militar
+MQ Manquehue
+HM Hernando de Magallanes
+LD Los Dominicos
