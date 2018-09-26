@@ -19,7 +19,7 @@ CXXFLAGS =
 # 	$(CXX) -o programa main.cpp metrored.o dataloader.o
 
 run: 
-	mpirun --allow-run-as-root -np 6 ./programa -f LH CA
+	mpirun --allow-run-as-root -np 6 ./programa -f VVA CA
 
 # clean:
 # 	rm -fr *.o *.out programa
