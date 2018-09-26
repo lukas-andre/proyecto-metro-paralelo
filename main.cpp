@@ -299,20 +299,19 @@ int main(int argc, char** argv) {
               char *c_codigo = new char[str_codigo.length() + 1];
               strcpy(c_codigo, str_codigo.c_str());
       
-              delete [] c_codigo;
 
               // Tranformo string a char* destino
               std::string str_destino = destino_recv;
               char *c_destino = new char[destino_recv.length() + 1];
               strcpy(c_destino, str_destino.c_str());
 
-              delete [] c_destino;
-
-
               inicio = getUbicacion(c_codigo, _l1, _l2, _l4, _l4a, _l5, _l6);
               destino = getUbicacion(c_destino, _l1, _l2, _l4, _l4a, _l5, _l6);
-              std::cout<<"INICIO: "<< inicio<<std::endl;
-              std::cout<<"DESTINO: "<< destino<<std::endl;
+              delete [] c_codigo;
+              delete [] c_destino;
+
+              std::cout<<"INICIO: "<< inicio->nombre<<std::endl;
+              std::cout<<"DESTINO: "<< destino->nombre<<std::endl;
               // testingRecorrerLinea(inicio, destino);
 
 
