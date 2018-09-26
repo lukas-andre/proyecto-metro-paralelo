@@ -311,14 +311,9 @@ int main(int argc, char** argv) {
 
               inicio = getUbicacion(c_codigo, _l1, _l2, _l4, _l4a, _l5, _l6);
               destino = getUbicacion(c_destino, _l1, _l2, _l4, _l4a, _l5, _l6);
-
-              recorrido combinacion = NULL;
-              recorrido stack_combinaciones = NULL;
-              recorrido combinaciones_conocidas = NULL;
-              recorridos rutas_ok = NULL;
-              recorrido ruta = NULL;
-              agregarLineaRecorrido(&combinacion, inicio);
-              // buscarDestinoDesde(combinacion, )
+              std::cout<<"INICIO: "<< inicio<<std::endl;
+              std::cout<<"DESTINO: "<< destino<<std::endl;
+              // testingRecorrerLinea(inicio, destino);
 
 
             }else{
