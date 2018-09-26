@@ -312,7 +312,8 @@ int main(int argc, char** argv) {
 
               std::cout<<"INICIO: "<< inicio->nombre<<std::endl;
               std::cout<<"DESTINO: "<< destino->nombre<<std::endl;
-              // testingRecorrerLinea(inicio, destino);
+              // JAJAJ MEAMO
+              testingRecorrerLinea(inicio, destino);
 
 
             }else{
