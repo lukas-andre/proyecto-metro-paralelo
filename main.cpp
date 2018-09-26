@@ -34,7 +34,11 @@ int main(int argc, char** argv) {
   }else {
     if(string(argv[1])  == "-f"){
         if(argc == 4){
-          
+          if(p_size != 6) {
+            std::cout << "El número de procesadores debe ser máximo 6" << std::endl;
+            MPI::Finalize();
+            return 0;
+          }
           if (p_rank==0){
             int largo_combinaciones;
             linea l1, l2, l4, l4a, l5, l6;
@@ -79,6 +83,9 @@ int main(int argc, char** argv) {
                 std::cout<<"Total Combinaciones: "<< largo_combinaciones <<std::endl;
                 std::cout<<"P: "<< p_rank <<std::endl;
                 int send_data;
+                if(p_size != 6) {
+                  return 0;
+                }
                 for(int i = 0; i <= p_size; i++){
                   if(i == 1){
                     bool confirm = false;
@@ -248,7 +255,7 @@ int main(int argc, char** argv) {
             bool confirm;
             MPI_Recv(&confirm, 1, MPI::BOOL, 0, 6, MPI_COMM_WORLD, &status);      
             if(confirm){
-              // RECIVO CODIGO INICIO
+              // RECIBO CODIGO INICIO
               MPI::Status stats;
               MPI::COMM_WORLD.Probe(0, 11 , stats);
               int l = stats.Get_count(MPI::CHAR);
@@ -257,7 +264,7 @@ int main(int argc, char** argv) {
               std::string codigo_recv(buf, l);
               delete [] buf;
 
-              // RECIVO RUTA
+              // RECIBO RUTA
               MPI::COMM_WORLD.Probe(0, 111, stats);
               int ll = stats.Get_count(MPI::CHAR);
               char *buff = new char[ll];
@@ -265,7 +272,7 @@ int main(int argc, char** argv) {
               std::string ruta_recv(buff, ll);
               delete [] buff;
               
-              // RECIVO CODIGO DESTINO
+              // RECIBO CODIGO DESTINO
               MPI::COMM_WORLD.Probe(0, 1111, stats);
               int lll = stats.Get_count(MPI::CHAR);
               char *bufff = new char[lll];
@@ -307,6 +314,7 @@ int main(int argc, char** argv) {
               std::cout<<"DESTINO P"<<p_rank<<": "<< destino->nombre<<std::endl;
 
               testingRecorrerLinea(inicio, destino);
+
             }else{
               MPI_Recv(&recv_data1, 1, MPI_INT, 0, 1, MPI_COMM_WORLD, &status);
             }
@@ -316,7 +324,7 @@ int main(int argc, char** argv) {
             bool confirm;
             MPI_Recv(&confirm, 1, MPI::BOOL, 0, 7, MPI_COMM_WORLD, &status);      
             if(confirm){
-              // RECIVO CODIGO INICIO
+              // RECIBO CODIGO INICIO
               MPI::Status stats;
               MPI::COMM_WORLD.Probe(0, 12 , stats);
               int l = stats.Get_count(MPI::CHAR);
@@ -325,7 +333,7 @@ int main(int argc, char** argv) {
               std::string codigo_recv(buf, l);
               delete [] buf;
 
-              // RECIVO RUTA
+              // RECIBO RUTA
               MPI::COMM_WORLD.Probe(0, 122, stats);
               int ll = stats.Get_count(MPI::CHAR);
               char *buff = new char[ll];
@@ -333,7 +341,7 @@ int main(int argc, char** argv) {
               std:: string ruta_recv(buff, ll);
               delete [] buff;
 
-              // RECIVO CODIGO DESTINO
+              // RECIBO CODIGO DESTINO
               MPI::COMM_WORLD.Probe(0, 1222, stats);
               int lll = stats.Get_count(MPI::CHAR);
               char *bufff = new char[lll];
@@ -374,7 +382,7 @@ int main(int argc, char** argv) {
               std::cout<<"INICIO P"<<p_rank<<": "<< inicio->nombre<<std::endl;
               std::cout<<"DESTINO P"<<p_rank<<": "<< destino->nombre<<std::endl;
 
-              // testingRecorrerLinea(inicio, destino);
+              testingRecorrerLinea(inicio, destino);
             }else{
               MPI_Recv(&recv_data2, 1, MPI_INT, 0, 2, MPI_COMM_WORLD, &status);
             }
@@ -384,7 +392,7 @@ int main(int argc, char** argv) {
             bool confirm;
             MPI_Recv(&confirm, 1, MPI::BOOL, 0, 8, MPI_COMM_WORLD, &status);
             if(confirm){  
-              // RECIVO CODIGO INICIO
+              // RECIBO CODIGO INICIO
               MPI::Status stats;
               MPI::COMM_WORLD.Probe(0, 13 , stats);
               int l = stats.Get_count(MPI::CHAR);
@@ -393,7 +401,7 @@ int main(int argc, char** argv) {
               std::string codigo_recv(buf, l);
               delete [] buf;
           
-              // RECIVO RUTA
+              // RECIBO RUTA
               MPI::COMM_WORLD.Probe(0, 133, stats);
               int ll = stats.Get_count(MPI::CHAR);
               char *buff = new char[ll];
@@ -401,7 +409,7 @@ int main(int argc, char** argv) {
               std::string ruta_recv(buff, ll);
               delete [] buff;  
               
-              // RECIVO CODIGO DESTINO
+              // RECIBO CODIGO DESTINO
               MPI::COMM_WORLD.Probe(0, 1333, stats);
               int lll = stats.Get_count(MPI::CHAR);
               char *bufff = new char[lll];
@@ -441,7 +449,7 @@ int main(int argc, char** argv) {
 
               std::cout<<"INICIO P"<<p_rank<<": "<< inicio->nombre<<std::endl;
               std::cout<<"DESTINO P"<<p_rank<<": "<< destino->nombre<<std::endl;
-              // testingRecorrerLinea(inicio, destino);
+              testingRecorrerLinea(inicio, destino);
             }else{
               MPI_Recv(&recv_data3, 1, MPI_INT, 0, 3, MPI_COMM_WORLD, &status);
             }
@@ -451,7 +459,7 @@ int main(int argc, char** argv) {
             bool confirm;
             MPI_Recv(&confirm, 1, MPI::BOOL, 0, 9, MPI_COMM_WORLD, &status);
             if(confirm){
-              // RECIVO CODIGO INICIO
+              // RECIBO CODIGO INICIO
               MPI::Status stats;
               MPI::COMM_WORLD.Probe(0, 14 , stats);
               int l = stats.Get_count(MPI::CHAR);
@@ -460,7 +468,7 @@ int main(int argc, char** argv) {
               std::string codigo_recv(buf, l);
               delete [] buf;
 
-              // RECIVO RUTA
+              // RECIBO RUTA
               MPI::COMM_WORLD.Probe(0, 144, stats);
               int ll = stats.Get_count(MPI::CHAR);
               char *buff = new char[ll];
@@ -468,7 +476,7 @@ int main(int argc, char** argv) {
               std::string ruta_recv(buff, ll);
               delete [] buff;
             
-              // RECIVO CODIGO DESTINO
+              // RECIBO CODIGO DESTINO
               MPI::COMM_WORLD.Probe(0, 1444, stats);
               int lll = stats.Get_count(MPI::CHAR);
               char *bufff = new char[lll];
@@ -509,7 +517,7 @@ int main(int argc, char** argv) {
               std::cout<<"INICIO P"<<p_rank<<": "<< inicio->nombre<<std::endl;
               std::cout<<"DESTINO P"<<p_rank<<": "<< destino->nombre<<std::endl;
               
-              // testingRecorrerLinea(inicio, destino);
+              testingRecorrerLinea(inicio, destino);
             }else{
               MPI_Recv(&recv_data4, 1, MPI_INT, 0, 4, MPI_COMM_WORLD, &status);
             }
@@ -519,7 +527,7 @@ int main(int argc, char** argv) {
             bool confirm;
             MPI_Recv(&confirm, 1, MPI::BOOL, 0, 10, MPI_COMM_WORLD, &status);
             if(confirm){           
-              // RECIVO CODIGO INICIO
+              // RECIBO CODIGO INICIO
               MPI::Status stats;
               MPI::COMM_WORLD.Probe(0, 15 , stats);
               int l = stats.Get_count(MPI::CHAR);
@@ -527,7 +535,7 @@ int main(int argc, char** argv) {
               MPI::COMM_WORLD.Recv(buf, l, MPI::CHAR, 0, 15, stats);
               std::string codigo_recv(buf, l);
               delete [] buf;
-              // RECIVO RUTA
+              // RECIBO RUTA
               MPI::COMM_WORLD.Probe(0, 155, stats);
               int ll = stats.Get_count(MPI::CHAR);
               char *buff = new char[ll];
@@ -535,7 +543,7 @@ int main(int argc, char** argv) {
               std::string ruta_recv(buff, ll);
               delete [] buff;  
               
-              // RECIVO CODIGO DESTINO
+              // RECIBO CODIGO DESTINO
               MPI::COMM_WORLD.Probe(0, 1555, stats);
               int lll = stats.Get_count(MPI::CHAR);
               char *bufff = new char[lll];
@@ -577,7 +585,7 @@ int main(int argc, char** argv) {
               std::cout<<"INICIO P"<<p_rank<<": "<< inicio->nombre<<std::endl;
               std::cout<<"DESTINO P"<<p_rank<<": "<< destino->nombre<<std::endl;
               
-              // testingRecorrerLinea(inicio, destino);
+              testingRecorrerLinea(inicio, destino);
             }else{
               MPI_Recv(&recv_data5, 1, MPI_INT, 0, 5, MPI_COMM_WORLD, &status);
             }
