@@ -21,6 +21,7 @@
 
     typedef rutas*recorridos;
 
+    void obtenerCombinacionesLinea(recorrido *combinaciones, linea lx);    
     void agregarLineaRecorrido(recorrido *p_ruta, linea p_estacion);
     void mostrarRecorrido(recorrido p_ruta);
     void testingRecorrerLinea(linea inicio, linea destino);

@@ -1,12 +1,25 @@
-CXX = mpic++ -g3 -Wall
-CXXFLAGS = -np 5
+CXX = mpic++ -g3 -Wall -Wextra
+CXXFLAGS = 
 
-all: program 
+ compile: metrored.cpp dataloader.cpp main.cpp
+	$(CXX) -c dataloader.cpp metrored.cpp
+	$(CXX) main.cpp dataloader.o metrored.o -o programa
 
-debug: make DEBUG=TRUE
+# all: program 
 
-program:
-	$(CXX) main.cpp metrored.cpp dataloader.cpp -o programa
+# debug: make DEBUG=TRUE
+
+# dataloader.o: clean dataloader.cpp dataloader.h
+# 	$(CXX) dataloader.cpp -o dataloader.o
+
+# metrored.o: metrored.cpp dataloader.h
+# 	$(CXX) metrored.cpp  -o metrored.o
+
+# program: dataloader.o metrored.o 
+# 	$(CXX) -o programa main.cpp metrored.o dataloader.o
 
 run: 
-	mpirun --allow-run-as-root -np 5 ./programa -f VVA CA
+	mpirun --allow-run-as-root -np 6 ./programa -f LH CA
+
+# clean:
+# 	rm -fr *.o *.out programa
