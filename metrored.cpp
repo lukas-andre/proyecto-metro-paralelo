@@ -214,6 +214,7 @@ void testingRecorrerLinea(linea inicio, linea destino) {
             stack_combinaciones = _stack_combinaciones_inicial;
             pop(&tmp);
         }
+        limpiarRutasEncontradas(&rutas_ok, inicio);
         mostrarRutas(rutas_ok);         
         // ruta_mas_corta = rutaMasCorta(rutas_ok);
         // fixRutaMasCorta(&ruta_mas_corta);
@@ -255,6 +256,7 @@ void buscarDestinoDesde(recorrido inicio_varabiale, linea destino, recorrido *st
     *stack_combinaciones = stack_combinaciones_p;
     *rutas_ok = _ruta_ok;
 }
+
 void mostrarRutas(recorridos rutas){
     int cont = 0;
     while(rutas){
@@ -265,7 +267,6 @@ void mostrarRutas(recorridos rutas){
         rutas = rutas->link;
     }
 }
-
 
 void guardarRuta(recorridos *ruta_ok, recorrido ruta){
     recorridos aux_ruta;
@@ -334,6 +335,51 @@ void eliminarCombinacionesConocidas(recorrido *nuevas_combinaciones, recorrido s
     }
     *nuevas_combinaciones = combinaciones_limpias;
 }
+
+void limpiarRutasEncontradas(recorridos *rutas_encontradas, linea inicio) {
+    recorridos _encontradas = *rutas_encontradas;
+    recorridos _limpias = NULL;
+
+    while(_encontradas) {
+        if( _encontradas->estaciones->estacion->nombre == inicio->nombre ) {
+            /* CREACION DE NODO CON RUTA LIMPIA */
+            recorridos _tmp = (recorridos) malloc(sizeof(rutas));
+            _tmp->estaciones = _encontradas->estaciones;
+            _tmp->link = NULL;
+            
+            agregarRutaLimpia(&_limpias, _tmp);
+        }
+        _encontradas = _encontradas->link;
+    }
+
+    *rutas_encontradas = _limpias;
+}
+
+void agregarRutaLimpia(recorridos *rutas_limpias, recorridos nodo_insertar) {
+    recorridos auxiliar = *rutas_limpias;
+      
+    if(auxiliar == NULL) {   
+        *rutas_limpias = nodo_insertar;        
+    } else {
+        while( auxiliar->link != NULL ) {
+            auxiliar = auxiliar->link;
+        }
+        
+        auxiliar->link = nodo_insertar;
+    }
+}
+
+// void pop(recorrido *combinaciones) {    
+//     recorrido aux = *combinaciones;
+//     recorrido tmp = *combinaciones;
+    
+//     if ( tmp != NULL ) {
+//         aux = aux->link;
+//         *combinaciones = aux;
+//         free(tmp);
+//     }
+    
+// }
 
 /*                                          FIN CALCULAR RUTA                                                     */
 /******************************************************************************************************************/

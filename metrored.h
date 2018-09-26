@@ -35,6 +35,8 @@
     void eliminarCombinacionesConocidas2(recorrido *faltantes_combinaciones, recorrido stack_combinaciones, recorrido combinaciones_conocidas);
     void buscarDestinoDesde(recorrido inicio_variable, linea destino, recorrido *stack_combinaciones, recorrido *combinaciones_conocidas, recorridos *rutas_ok, recorrido *rutas_pendientes );
     void eliminarCombinacionesConocidas(recorrido *nuevas_combinaciones, recorrido stack_combinaciones);
+    void limpiarRutasEncontradas(recorridos *rutas_encontradas, linea inicio);
+    void agregarRutaLimpia(recorridos *rutas_limpias, recorridos nodo_insertar);
 
     void agregarCombinacionesLimpias(recorrido *stack_combinaciones, recorrido nuevas_combinaciones);
     int obtenerLargoRecorrido(recorrido lista);
