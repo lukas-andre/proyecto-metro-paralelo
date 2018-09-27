@@ -19,6 +19,19 @@ std::string toString(recorrido ruta){
   }
   return rutax;
 }
+
+int contadorEstaciones(std::string s){
+    std::string delimiter = "-";
+    size_t pos = 0;
+    std::string token;
+    int i = 0;
+    while ((pos = s.find(delimiter)) != std::string::npos) {
+      token = s.substr(0, pos);
+      s.erase(0, pos + delimiter.length());
+      i++;
+    }
+    return i;
+}
  
 int main(int argc, char** argv) {
   MPI_Status status;
@@ -61,13 +74,15 @@ int main(int argc, char** argv) {
 
             cout << "Estación de inicio  : " << inicio->nombre << endl;
             cout << "Estación destino    : " << destino->nombre << endl << endl;
-
+            
             linea estacion_inicio;
             estacion_inicio = inicio;
 
             recorrido combinaciones = NULL; 
             recorrido p_ruta = NULL;
             recorridos rutas = NULL;
+            // CREO UN STRING LARGO
+            std::string _ruta_mas_corta(1000, 'l');
 
             if (destinoEnLinea(estacion_inicio, destino)) {
                 std::string direccion;
@@ -80,11 +95,8 @@ int main(int argc, char** argv) {
                 obtenerCombinacionesLinea(&combinaciones, estacion_inicio);
                 recorrido tmp = combinaciones;
                 largo_combinaciones = obtenerLargoRecorrido(combinaciones);
-                std::cout<<"mostrando combinaciones de: "<< inicio->nombre <<std::endl;
-                mostrarRecorrido(combinaciones);
-                std::cout<<"Total Combinaciones: "<< largo_combinaciones <<std::endl;
-                std::cout<<"P: "<< p_rank <<std::endl;
                 int send_data;
+                MPI::Status stats; 
                 if(p_size != 6) {
                   return 0;
                 }
@@ -98,7 +110,6 @@ int main(int argc, char** argv) {
                     if(confirm){
                       // ENVIO CODIGO INICIO
                       std::string codigo = tmp->estacion->combinacion->codigo;
-                      std::cout<<"Enviando data a P1 "<< codigo << " desde P"<< p_rank <<std::endl;                      
                       MPI::COMM_WORLD.Send(codigo.c_str(), codigo.length(), MPI::CHAR, 1, 11); 
                       // ENVIO RUTA
                       recorrido ruta_pendiente = NULL;
@@ -113,6 +124,21 @@ int main(int argc, char** argv) {
                       // ENVIO CODIGO DESTINO
                       std::string codigo_destino = destino->codigo;
                       MPI::COMM_WORLD.Send(codigo_destino.c_str(), codigo_destino.length(), MPI::CHAR, 1, 1111); 
+                      // RECIBO RUTA MAS CORTA
+                      MPI::COMM_WORLD.Probe(1, 99, stats);
+                      int l = stats.Get_count(MPI::CHAR);
+                      char *buf = new char[l];
+                      MPI::COMM_WORLD.Recv(buf, l, MPI::CHAR, 1, 99, stats);
+                      std::string ruta_mas_corta(buf, l);
+                      delete [] buf;
+                      // ALMAZENAMOS RUTA                      
+                      int largo_ruta = ruta_mas_corta.length();
+                      int _largo_ruta = _ruta_mas_corta.length();
+                      s_ruta.append(ruta_mas_corta);
+                      if(largo_ruta < _largo_ruta ) {
+                        _ruta_mas_corta = s_ruta;
+                      }
+                    
                     }else{
                       send_data = -1;
                       MPI_Send(&send_data, 1, MPI_INT, 1, 1, MPI_COMM_WORLD); 
@@ -129,7 +155,6 @@ int main(int argc, char** argv) {
                     if(confirm){
                       // ENVIO CODIGO INICIO                      
                       std::string nombre = tmp->estacion->combinacion->codigo;
-                      std::cout<<"Enviando data "<< nombre <<" a P2 desde P"<< p_rank <<std::endl;            
                       MPI::COMM_WORLD.Send(nombre.c_str(), nombre.length(), MPI::CHAR, 2, 12);    
                       // ENVIO RUTA
                       recorrido ruta_pendiente = NULL;
@@ -144,6 +169,20 @@ int main(int argc, char** argv) {
                       // ENVIO CODIGO DESTINO
                       std::string codigo_destino = destino->codigo;
                       MPI::COMM_WORLD.Send(codigo_destino.c_str(), codigo_destino.length(), MPI::CHAR, 2, 1222);
+                      // RECIBO RUTA MAS CORTA
+                      MPI::COMM_WORLD.Probe(2, 88, stats);
+                      int l = stats.Get_count(MPI::CHAR);
+                      char *buf = new char[l];
+                      MPI::COMM_WORLD.Recv(buf, l, MPI::CHAR, 2, 88, stats);
+                      std::string ruta_mas_corta(buf, l);
+                      delete [] buf;
+                      // ALMAZENAMOS RUTA                      
+                      int largo_ruta = ruta_mas_corta.length();
+                      int _largo_ruta = _ruta_mas_corta.length();
+                      s_ruta.append(ruta_mas_corta);
+                      if(largo_ruta < _largo_ruta ) {
+                        _ruta_mas_corta = s_ruta;
+                      }
 
                     }else{
                       send_data = -1;
@@ -161,7 +200,6 @@ int main(int argc, char** argv) {
                     if(confirm){
                       // ENVIO CODIGO INICIO 
                       std::string nombre = tmp->estacion->combinacion->codigo;
-                      std::cout<<"Enviando data a P3 " <<nombre<<" desde P"<< p_rank <<std::endl;
                       MPI::COMM_WORLD.Send(nombre.c_str(), nombre.length(), MPI::CHAR, 3, 13);         
                       // ENVIO RUTA
                       recorrido ruta_pendiente = NULL;
@@ -176,6 +214,21 @@ int main(int argc, char** argv) {
                       // ENVIO CODIGO DESTINO
                       std::string codigo_destino = destino->codigo;
                       MPI::COMM_WORLD.Send(codigo_destino.c_str(), codigo_destino.length(), MPI::CHAR, 3, 1333);
+                      // RECIBO RUTA MAS CORTA
+                      MPI::COMM_WORLD.Probe(3, 77, stats);
+                      int l = stats.Get_count(MPI::CHAR);
+                      char *buf = new char[l];
+                      MPI::COMM_WORLD.Recv(buf, l, MPI::CHAR, 3, 77, stats);
+                      std::string ruta_mas_corta(buf, l);
+                      delete [] buf;
+                      // ALMAZENAMOS RUTA
+                      int largo_ruta = ruta_mas_corta.length();
+                      int _largo_ruta = _ruta_mas_corta.length();
+                      s_ruta.append(ruta_mas_corta);
+                      if(largo_ruta < _largo_ruta ) {
+                        _ruta_mas_corta = s_ruta;
+                      }
+
                     }else{
                       send_data = -1;
                       MPI_Send(&send_data, 1, MPI_INT, 3, 3, MPI_COMM_WORLD);  
@@ -194,7 +247,6 @@ int main(int argc, char** argv) {
                     if(confirm){
                       // ENVIO CODIGO INICIO 
                       std::string nombre = tmp->estacion->combinacion->codigo;
-                      std::cout<<"Enviando data a P4 " << nombre <<" desde P"<< p_rank <<std::endl;
                       MPI::COMM_WORLD.Send(nombre.c_str(), nombre.length(), MPI::CHAR, 4, 14);    
                       // ENVIO RUTA
                       recorrido ruta_pendiente = NULL;
@@ -209,7 +261,20 @@ int main(int argc, char** argv) {
                       // ENVIO CODIGO DESTINO
                       std::string codigo_destino = destino->codigo;
                       MPI::COMM_WORLD.Send(codigo_destino.c_str(), codigo_destino.length(), MPI::CHAR, 4, 1444);
-                      
+                      // RECIBO RUTA MAS CORTA
+                      MPI::COMM_WORLD.Probe(4, 66, stats);
+                      int l = stats.Get_count(MPI::CHAR);
+                      char *buf = new char[l];
+                      MPI::COMM_WORLD.Recv(buf, l, MPI::CHAR, 4, 66, stats);
+                      std::string ruta_mas_corta(buf, l);
+                      delete [] buf;
+                      // ALMAZENAMOS RUTA
+                      int largo_ruta = ruta_mas_corta.length();
+                      int _largo_ruta = _ruta_mas_corta.length();
+                      s_ruta.append(ruta_mas_corta);
+                      if(largo_ruta < _largo_ruta ) {
+                        _ruta_mas_corta = s_ruta;
+                      }
                     }else{
                       send_data = -1;
                       MPI_Send(&send_data, 1, MPI_INT, 4, 4, MPI_COMM_WORLD); 
@@ -228,7 +293,6 @@ int main(int argc, char** argv) {
                     if(confirm){
                       // ENVIO CODIGO INICIO                       
                       std::string nombre = tmp->estacion->combinacion->codigo;
-                      std::cout<<"Enviando data a P5 "<< nombre << " desde P"<< p_rank <<std::endl;
                       MPI::COMM_WORLD.Send(nombre.c_str(), nombre.length(), MPI::CHAR, 5, 15);  
                       // ENVIO RUTA
                       recorrido ruta_pendiente = NULL;
@@ -243,13 +307,30 @@ int main(int argc, char** argv) {
                       // ENVIO CODIGO DESTINO
                       std::string codigo_destino = destino->codigo;
                       MPI::COMM_WORLD.Send(codigo_destino.c_str(), codigo_destino.length(), MPI::CHAR, 5, 1555);
+                      // RECIBO RUTA MAS CORTA
+                      MPI::COMM_WORLD.Probe(5, 55, stats);
+                      int l = stats.Get_count(MPI::CHAR);
+                      char *buf = new char[l];
+                      MPI::COMM_WORLD.Recv(buf, l, MPI::CHAR, 5, 55, stats);
+                      std::string ruta_mas_corta(buf, l);
+                      delete [] buf;
+                      // ALMAZENAMOS RUTA
+                      int largo_ruta = ruta_mas_corta.length();
+                      int _largo_ruta = _ruta_mas_corta.length();
+                      s_ruta.append(ruta_mas_corta);
+                      if(largo_ruta < _largo_ruta ) {
+                        _ruta_mas_corta = s_ruta;
+                      }
+
                     }else{
                       send_data = -1;
                       MPI_Send(&send_data, 1, MPI_INT, 5, 5, MPI_COMM_WORLD);
                     }                 
                   }
                 }  
+
                 std::cout << "Fin Busqueda Rutas"<<std::endl;
+                std::cout << "Ruta mas corta: "<< _ruta_mas_corta<<std::endl;
             }
           } 
           if(p_rank == 1){
@@ -312,12 +393,7 @@ int main(int argc, char** argv) {
               delete [] c_codigo;
               delete [] c_destino;
 
-              std::cout<<"INICIO P"<<p_rank<<": "<< inicio->nombre<<std::endl;
-              std::cout<<"DESTINO P"<<p_rank<<": "<< destino->nombre<<std::endl;
-
               std::string ruta_mas_corta = buscarRutaMasCorta(inicio, destino);
-
-              std::cout<<ruta_mas_corta<<std::endl;
 
               MPI::COMM_WORLD.Send(ruta_mas_corta.c_str(), ruta_mas_corta.length(), MPI::CHAR, 0, 99);
 
@@ -386,10 +462,10 @@ int main(int argc, char** argv) {
               delete [] c_codigo;
               delete [] c_destino;
 
-              std::cout<<"INICIO P"<<p_rank<<": "<< inicio->nombre<<std::endl;
-              std::cout<<"DESTINO P"<<p_rank<<": "<< destino->nombre<<std::endl;
 
               std::string ruta_mas_corta = buscarRutaMasCorta(inicio, destino);
+              
+              MPI::COMM_WORLD.Send(ruta_mas_corta.c_str(), ruta_mas_corta.length(), MPI::CHAR, 0, 88);
               
 
             }else{
@@ -456,12 +532,10 @@ int main(int argc, char** argv) {
               delete [] c_codigo;
               delete [] c_destino;
 
-              std::cout<<"INICIO P"<<p_rank<<": "<< inicio->nombre<<std::endl;
-              std::cout<<"DESTINO P"<<p_rank<<": "<< destino->nombre<<std::endl;
-
               std::string ruta_mas_corta = buscarRutaMasCorta(inicio, destino);
 
-              std::cout<<ruta_mas_corta<<std::endl;
+              MPI::COMM_WORLD.Send(ruta_mas_corta.c_str(), ruta_mas_corta.length(), MPI::CHAR, 0, 77);
+              
 
             }else{
               MPI_Recv(&recv_data3, 1, MPI_INT, 0, 3, MPI_COMM_WORLD, &status);
@@ -527,13 +601,9 @@ int main(int argc, char** argv) {
               delete [] c_codigo;
               delete [] c_destino;
 
-              std::cout<<"INICIO P"<<p_rank<<": "<< inicio->nombre<<std::endl;
-              std::cout<<"DESTINO P"<<p_rank<<": "<< destino->nombre<<std::endl;
-              
               std::string ruta_mas_corta = buscarRutaMasCorta(inicio, destino);
 
-              std::cout<<ruta_mas_corta<<std::endl;
-
+              MPI::COMM_WORLD.Send(ruta_mas_corta.c_str(), ruta_mas_corta.length(), MPI::CHAR, 0, 66);
             }else{
               MPI_Recv(&recv_data4, 1, MPI_INT, 0, 4, MPI_COMM_WORLD, &status);
             }
@@ -598,12 +668,10 @@ int main(int argc, char** argv) {
               delete [] c_codigo;
               delete [] c_destino;
 
-              std::cout<<"INICIO P"<<p_rank<<": "<< inicio->nombre<<std::endl;
-              std::cout<<"DESTINO P"<<p_rank<<": "<< destino->nombre<<std::endl;
-              
               std::string ruta_mas_corta = buscarRutaMasCorta(inicio, destino);
 
-              std::cout<<ruta_mas_corta<<std::endl;
+              MPI::COMM_WORLD.Send(ruta_mas_corta.c_str(), ruta_mas_corta.length(), MPI::CHAR, 0, 55);
+              
             }else{
               MPI_Recv(&recv_data5, 1, MPI_INT, 0, 5, MPI_COMM_WORLD, &status);
             }

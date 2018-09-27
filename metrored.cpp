@@ -242,7 +242,6 @@ std::string fixRutaMasCorta(recorrido *ruta){
     std::string s_ruta; 
     while(_ruta_formateada != NULL) {
         if(_ruta_formateada->link == NULL) {
-            std::cout << _ruta_formateada->estacion->nombre << "\n\n";
             s_ruta.append(_ruta_formateada->estacion->nombre);
         } else {
             if( _ruta_formateada->estacion->nombre == _ruta_formateada->link->estacion->nombre ) {
