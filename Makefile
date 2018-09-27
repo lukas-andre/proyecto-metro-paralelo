@@ -19,7 +19,7 @@ compile: clean metrored.cpp dataloader.cpp main.cpp
 # 	$(CXX) -o programa main.cpp metrored.o dataloader.o
 
 run: 
-	mpirun --allow-run-as-root -np 6 ./programa -f VVA CA
+	mpirun --allow-run-as-root -np 6 ./programa -f VVA LH
 
 clean:
 	rm -fr *.o *.out programa
