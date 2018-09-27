@@ -20,8 +20,11 @@
     }rutas;
 
     typedef rutas*recorridos;
-    void testingRecorrerLinea(linea inicio, linea destino);
+    std::string buscarRutaMasCorta(linea inicio, linea destino);
     void buscarDestinoDesde(recorrido inicio_varabiale, linea destino, recorrido *stack_combinaciones, recorrido *combinaciones_conocidas, recorridos *rutas_ok, recorrido *rutas_pendientes);
+    
+    std::string fixRutaMasCorta(recorrido *ruta);
+    recorrido rutaMasCorta(recorridos rutas);
 
     void obtenerCombinacionesLinea(recorrido *combinaciones, linea lx);    
     void agregarLineaRecorrido(recorrido *p_ruta, linea p_estacion);

@@ -177,7 +177,7 @@ bool inLista(recorrido combinaciones, linea lx) {
 /******************************************************************************************************************/
 /*                                    INICIO CALCULAR RUTA                                                        */
 
-void testingRecorrerLinea(linea inicio, linea destino) {
+std::string buscarRutaMasCorta(linea inicio, linea destino) {
     linea estacion_inicio;
     estacion_inicio = inicio;
     
@@ -191,7 +191,8 @@ void testingRecorrerLinea(linea inicio, linea destino) {
         std::string direccion;
         direccion = buscarDireccion(estacion_inicio, destino);
         recorrerLinea(estacion_inicio, direccion, destino, &p_ruta);
-        mostrarRecorrido(p_ruta);
+        std::string s_ruta_mas_corta= fixRutaMasCorta(&p_ruta);
+        return s_ruta_mas_corta;
     }
     else{
         obtenerCombinacionesLinea(&combinaciones, estacion_inicio);
@@ -215,11 +216,45 @@ void testingRecorrerLinea(linea inicio, linea destino) {
             pop(&tmp);
         }
         limpiarRutasEncontradas(&rutas_ok, inicio);
-        mostrarRutas(rutas_ok);         
-        // ruta_mas_corta = rutaMasCorta(rutas_ok);
-        // fixRutaMasCorta(&ruta_mas_corta);
-        // mostrarRecorrido(ruta_mas_corta);
+        ruta_mas_corta = rutaMasCorta(rutas_ok);
+        std::string s_ruta_mas_corta = fixRutaMasCorta(&ruta_mas_corta);
+
+        return s_ruta_mas_corta;
     }
+}
+
+recorrido rutaMasCorta(recorridos rutas){
+    recorrido mas_corta = NULL;
+    int min = 999999;
+    while(rutas){
+        if(largoRecorrido(rutas->estaciones) < min){
+            min = largoRecorrido(rutas->estaciones);
+            mas_corta = rutas->estaciones;
+        }
+        rutas = rutas->link;
+    }
+    return mas_corta;  
+}
+
+std::string fixRutaMasCorta(recorrido *ruta){
+    recorrido _ruta = *ruta;
+    recorrido _ruta_formateada = *ruta;
+    std::string s_ruta; 
+    while(_ruta_formateada != NULL) {
+        if(_ruta_formateada->link == NULL) {
+            std::cout << _ruta_formateada->estacion->nombre << "\n\n";
+            s_ruta.append(_ruta_formateada->estacion->nombre);
+        } else {
+            if( _ruta_formateada->estacion->nombre == _ruta_formateada->link->estacion->nombre ) {
+                _ruta_formateada = _ruta_formateada->link;
+            }
+            if(_ruta_formateada->link == NULL) std::cout << _ruta_formateada->estacion->nombre << "\n\n";
+            s_ruta.append(_ruta_formateada->estacion->nombre);            
+            s_ruta.append(" - ");
+        }
+        _ruta_formateada = _ruta_formateada->link;
+    }
+    return s_ruta;
 }
 void buscarDestinoDesde(recorrido inicio_varabiale, linea destino, recorrido *stack_combinaciones, recorrido *combinaciones_conocidas, recorridos *rutas_ok, recorrido *rutas_pendientes ){
     recorridos _ruta_ok = *rutas_ok;    
@@ -368,18 +403,6 @@ void agregarRutaLimpia(recorridos *rutas_limpias, recorridos nodo_insertar) {
         auxiliar->link = nodo_insertar;
     }
 }
-
-// void pop(recorrido *combinaciones) {    
-//     recorrido aux = *combinaciones;
-//     recorrido tmp = *combinaciones;
-    
-//     if ( tmp != NULL ) {
-//         aux = aux->link;
-//         *combinaciones = aux;
-//         free(tmp);
-//     }
-    
-// }
 
 /*                                          FIN CALCULAR RUTA                                                     */
 /******************************************************************************************************************/

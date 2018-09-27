@@ -67,12 +67,14 @@ int main(int argc, char** argv) {
 
             recorrido combinaciones = NULL; 
             recorrido p_ruta = NULL;
+            recorridos rutas = NULL;
 
             if (destinoEnLinea(estacion_inicio, destino)) {
                 std::string direccion;
                 direccion = buscarDireccion(estacion_inicio, destino);
                 recorrerLinea(estacion_inicio, direccion, destino, &p_ruta);
                 mostrarRecorrido(p_ruta);
+                guardarRuta(&rutas, p_ruta);
             }
             else{
                 obtenerCombinacionesLinea(&combinaciones, estacion_inicio);
@@ -246,7 +248,7 @@ int main(int argc, char** argv) {
                       MPI_Send(&send_data, 1, MPI_INT, 5, 5, MPI_COMM_WORLD);
                     }                 
                   }
-                }
+                }  
                 std::cout << "Fin Busqueda Rutas"<<std::endl;
             }
           } 
@@ -313,7 +315,12 @@ int main(int argc, char** argv) {
               std::cout<<"INICIO P"<<p_rank<<": "<< inicio->nombre<<std::endl;
               std::cout<<"DESTINO P"<<p_rank<<": "<< destino->nombre<<std::endl;
 
-              testingRecorrerLinea(inicio, destino);
+              std::string ruta_mas_corta = buscarRutaMasCorta(inicio, destino);
+
+              std::cout<<ruta_mas_corta<<std::endl;
+
+              MPI::COMM_WORLD.Send(ruta_mas_corta.c_str(), ruta_mas_corta.length(), MPI::CHAR, 0, 99);
+
 
             }else{
               MPI_Recv(&recv_data1, 1, MPI_INT, 0, 1, MPI_COMM_WORLD, &status);
@@ -382,7 +389,9 @@ int main(int argc, char** argv) {
               std::cout<<"INICIO P"<<p_rank<<": "<< inicio->nombre<<std::endl;
               std::cout<<"DESTINO P"<<p_rank<<": "<< destino->nombre<<std::endl;
 
-              testingRecorrerLinea(inicio, destino);
+              std::string ruta_mas_corta = buscarRutaMasCorta(inicio, destino);
+              
+
             }else{
               MPI_Recv(&recv_data2, 1, MPI_INT, 0, 2, MPI_COMM_WORLD, &status);
             }
@@ -449,7 +458,11 @@ int main(int argc, char** argv) {
 
               std::cout<<"INICIO P"<<p_rank<<": "<< inicio->nombre<<std::endl;
               std::cout<<"DESTINO P"<<p_rank<<": "<< destino->nombre<<std::endl;
-              testingRecorrerLinea(inicio, destino);
+
+              std::string ruta_mas_corta = buscarRutaMasCorta(inicio, destino);
+
+              std::cout<<ruta_mas_corta<<std::endl;
+
             }else{
               MPI_Recv(&recv_data3, 1, MPI_INT, 0, 3, MPI_COMM_WORLD, &status);
             }
@@ -517,7 +530,10 @@ int main(int argc, char** argv) {
               std::cout<<"INICIO P"<<p_rank<<": "<< inicio->nombre<<std::endl;
               std::cout<<"DESTINO P"<<p_rank<<": "<< destino->nombre<<std::endl;
               
-              testingRecorrerLinea(inicio, destino);
+              std::string ruta_mas_corta = buscarRutaMasCorta(inicio, destino);
+
+              std::cout<<ruta_mas_corta<<std::endl;
+
             }else{
               MPI_Recv(&recv_data4, 1, MPI_INT, 0, 4, MPI_COMM_WORLD, &status);
             }
@@ -585,7 +601,9 @@ int main(int argc, char** argv) {
               std::cout<<"INICIO P"<<p_rank<<": "<< inicio->nombre<<std::endl;
               std::cout<<"DESTINO P"<<p_rank<<": "<< destino->nombre<<std::endl;
               
-              testingRecorrerLinea(inicio, destino);
+              std::string ruta_mas_corta = buscarRutaMasCorta(inicio, destino);
+
+              std::cout<<ruta_mas_corta<<std::endl;
             }else{
               MPI_Recv(&recv_data5, 1, MPI_INT, 0, 5, MPI_COMM_WORLD, &status);
             }
